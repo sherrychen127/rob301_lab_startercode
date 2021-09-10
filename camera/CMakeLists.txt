@@ -77,7 +77,7 @@ include_directories(
 # Install
 ################################################################################
 catkin_install_python(PROGRAMS 
-  nodes/camera
+  nodes/camera.py
   nodes/color.py
   nodes/line_detector.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -75,7 +75,7 @@ include_directories(
 # Install
 ################################################################################
 catkin_install_python(PROGRAMS 
-  nodes/lab2
+  nodes/lab2.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

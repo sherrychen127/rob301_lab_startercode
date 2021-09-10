@@ -76,7 +76,7 @@ include_directories(
 ################################################################################
 catkin_install_python(PROGRAMS 
   nodes/localizer.py
-  nodes/pid.py
+  #nodes/pid.py
   nodes/get_scan_angle.py
   nodes/pub_noisy_vel.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
