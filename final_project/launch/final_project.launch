@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="camera" type="color.py" name="color" output="screen">
+  	</node>
+  <node pkg="final_project" type="final_project.py" name="final_project" output="screen">
+  	</node>
+</launch>
