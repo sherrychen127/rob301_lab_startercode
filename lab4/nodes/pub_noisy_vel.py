@@ -15,20 +15,15 @@ class NoiseMaker(object):
         self.mu = mu
         self.std = std
 
-        self.measurements = []
-        self.measured_state = []
-        self.states = []
-        self.P_history = []
-
-        self.prev = rospy.Time.now().to_sec()
-
         self.cmd_sub = rospy.Subscriber("cmd_vel", Twist, self.cmd_callback)
         self.cmd_pub = rospy.Publisher("cmd_vel_noisy", Twist, queue_size=1)
 
     def cmd_callback(self, cmd_msg):
-        self.u = cmd_msg.linear.x
+        # noisy twist is the same but with Gaussian noise on linear x
         twist = Twist()
-        twist.linear.x = self.x + np.random.normal(loc=self.mu, scale=self.std)
+        twist.linear.x = cmd_msg.linear.x + np.random.normal(
+            loc=self.mu, scale=self.std
+        )
         self.cmd_pub.publish(twist)
 
 
