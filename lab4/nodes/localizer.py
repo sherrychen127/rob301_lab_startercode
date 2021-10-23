@@ -2,7 +2,7 @@
 import rospy
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, UInt32
 
 import matplotlib.pyplot as plt
 import math
@@ -24,7 +24,7 @@ class KalmanFilter(object):
 
         self.state_pub = rospy.Publisher("state", Float64, queue_size=1)
         self.scan_sub = rospy.Subscriber(
-            "scan_angle", String, self.scan_callback, queue_size=1
+            "scan_angle", UInt32, self.scan_callback, queue_size=1
         )
         self.cmd_sub = rospy.Subscriber("cmd_vel_noisy", Twist, self.cmd_callback)
 
@@ -33,7 +33,7 @@ class KalmanFilter(object):
 
     ## scall_callback updates self.phi with the most recent measurement of the tower.
     def scan_callback(self, data):
-        self.phi = float(data.data) * math.pi / 180
+        self.phi = data.data * math.pi / 180
 
     ## call within run_kf to update the state with the measurement
     def predict(self, u=0):
@@ -63,8 +63,8 @@ class KalmanFilter(object):
 if __name__ == "__main__":
     rospy.init_node("lab4")
 
-    h = 0.61  # y distance to tower
-    d = 0.61 * 3  # x distance to tower (from origin)
+    h = 0.60  # y distance to tower
+    d = 0.60 * 3  # x distance to tower (from origin)
 
     x_0 = 0  # initial state position
 
