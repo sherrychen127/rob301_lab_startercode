@@ -33,7 +33,11 @@ def main():
 
     while not rospy.is_shutdown():
         angle = get_scan()
-        scan_pub.publish(angle)
+
+        # Angle is nan if no measurements where recorded in the allowed range.
+        # In this case, publish nothing.
+        if not np.isnan(median_angle):
+            scan_pub.publish(angle)
 
 
 if __name__ == "__main__":

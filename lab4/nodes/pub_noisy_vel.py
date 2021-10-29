@@ -5,7 +5,6 @@ from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 
-import matplotlib.pyplot as plt
 import math
 import numpy as np
 

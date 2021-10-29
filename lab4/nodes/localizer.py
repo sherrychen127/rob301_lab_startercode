@@ -20,7 +20,7 @@ class KalmanFilter(object):
         self.x = x_0
 
         self.u = 0  # initialize the cmd_vel input
-        self.phi = np.nan  # initialize the measurement input
+        self.phi = 0  # initialize the measurement input
 
         self.state_pub = rospy.Publisher("state", Float64, queue_size=1)
         self.scan_sub = rospy.Subscriber(
