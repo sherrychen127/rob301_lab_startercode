@@ -21,10 +21,9 @@ def get_scan():
 
     # filter out measurements with ranges larger than 3m or y_range outside of 0.5-0.65m
     angles = angles[(y_range <= 0.65) & (y_range >= 0.5) & (in_range < 3)]
-    median_angle = np.median(angles)
 
-    # take the median of the sensed angles
-    return median_angle
+    # the median is NaN if there are no valid angles
+    return np.median(angles)
 
 
 def main():
@@ -33,11 +32,7 @@ def main():
 
     while not rospy.is_shutdown():
         angle = get_scan()
-
-        # Angle is nan if no measurements where recorded in the allowed range.
-        # In this case, publish nothing.
-        if not np.isnan(median_angle):
-            scan_pub.publish(angle)
+        scan_pub.publish(angle)
 
 
 if __name__ == "__main__":
