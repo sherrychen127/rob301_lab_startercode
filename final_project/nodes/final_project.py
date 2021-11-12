@@ -3,22 +3,22 @@ import rospy
 import math
 import time
 from geometry_msgs.msg import Twist
-from std_msgs.msg import UInt32, UInt32MultiArray
+from std_msgs.msg import String, UInt32MultiArray
 import numpy as np
 
 
 class BayesLoc:
     def __init__(self, p0, colour_codes, colour_map):
         self.colour_sub = rospy.Subscriber(
-            "camera_rgb", UInt32MultiArray, self.colour_callback
+            "mean_img_rgb", UInt32MultiArray, self.colour_callback
         )
-        self.line_sub = rospy.Subscriber("line_idx", UInt32, self.line_callback)
+        self.line_sub = rospy.Subscriber("line_idx", String, self.line_callback)
         self.cmd_pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
 
-        self.num_states = len(P0)
+        self.num_states = len(p0)
         self.colour_codes = colour_codes
         self.colour_map = colour_map
-        self.probability = P0
+        self.probability = p0
         self.state_prediction = np.zeros(self.num_states)
 
         self.cur_colour = None  # most recent measured colour
@@ -28,6 +28,7 @@ class BayesLoc:
         callback function that receives the most recent colour measurement from the camera.
         """
         self.cur_colour = np.array(msg.data)  # [r, g, b]
+        print(self.cur_colour)
 
     def line_callback(self, msg):
         """
@@ -85,17 +86,17 @@ class BayesLoc:
 if __name__ == "__main__":
 
     # This is the known map of offices by colour
-    # 0: Green, 1: Purple, 2: Orange, 3: Yellow, 4: Line
+    # 0: red, 1: green, 2: blue, 3: yellow, 4: line
     # current map starting at cell #2 and ending at cell #12
     colour_map = [3, 0, 1, 2, 2, 0, 1, 2, 3, 0, 1]
 
     # TODO calibrate these RGB values to recognize when you see a colour
     colour_codes = [
-        [72, 255, 72],    # green
-        [255, 144, 0],    # orange
-        [145, 145, 255],  # purple
-        [255, 255, 0],    # yellow
-        [133, 133, 133],  # line
+        [167, 146, 158],  # red
+        [163, 184, 100],  # green
+        [173, 166, 171],  # blue
+        [167, 170, 117],  # yellow
+        [150, 150, 150],  # line
     ]
 
     # initial probability of being at a given office is uniform
