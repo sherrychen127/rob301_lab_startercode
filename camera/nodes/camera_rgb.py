@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Get mean color (r, g, b) value and publish to /mean_img_rgb
+"""
+
 import roslib
 import sys
 import rospy
@@ -12,29 +16,27 @@ from sensor_msgs.msg import Image
 class CameraRGB(object):
     def __init__(self):
         self.color_sensor_publisher = rospy.Publisher(
-            "color_rgb", UInt32MultiArray, queue_size=1
+            "mean_img_rgb", UInt32MultiArray, queue_size=1
         )
         self.camera_subscriber = rospy.Subscriber(
             "raspicam_node/image", Image, self.camera_callback, queue_size=1
         )
 
-    def camera_callback(self, data):
+    def camera_callback(self, msg):
         bridge = CvBridge()
         try:
-            cv_img = bridge.imgmsg_to_cv2(data, "rgb8")
+            rgb_cv_img = bridge.imgmsg_to_cv2(msg, "rgb8")
         except CvBridgeError as e:
             print(e)
 
-        array = cv_img[:200]
-
-        intermediate = np.mean(array, axis=0)
+        # publish the color sensor reading
+        color_array = rgb_cv_img[:200]
+        intermediate = np.mean(color_array, axis=0)
         color = np.mean(intermediate, axis=0)
-        print("r: {}, g: {}, b: {}".format(color[0], color[1], color[2]))
 
-        # publish the data as an array [r, g, b]
-        msg = UInt32MultiArray()
-        msg.data = color
-        self.color_sensor_publisher.publish(msg)
+        color_msg = UInt32MultiArray()
+        color_msg.data = color
+        self.color_sensor_publisher.publish(color_msg)
 
 
 def main():
