@@ -5,6 +5,7 @@ import time
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String, UInt32MultiArray
 import numpy as np
+import colorsys
 
 
 class BayesLoc:
@@ -91,6 +92,10 @@ if __name__ == "__main__":
     colour_map = [3, 0, 1, 2, 2, 0, 1, 2, 3, 0, 1]
 
     # TODO calibrate these RGB values to recognize when you see a colour
+    # NOTE: you may find it easier to compare colour readings using a different
+    # colour system, such as HSV (hue, saturation, value). To convert RGB to
+    # HSV, use:
+    # h, s, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
     colour_codes = [
         [167, 146, 158],  # red
         [163, 184, 100],  # green
